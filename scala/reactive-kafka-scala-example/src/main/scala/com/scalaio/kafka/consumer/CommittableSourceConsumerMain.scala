@@ -1,4 +1,4 @@
-package com.example.consumer
+package com.scalaio.kafka.consumer
 
 import akka.actor.ActorSystem
 import akka.kafka.scaladsl.Consumer

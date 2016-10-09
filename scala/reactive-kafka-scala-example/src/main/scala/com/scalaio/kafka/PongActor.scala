@@ -1,4 +1,4 @@
-package com.example
+package com.scalaio.kafka
 
 import akka.actor.{Actor, ActorLogging, Props}
 

@@ -1,4 +1,4 @@
-name := """reactive-kafka-example"""
+name := "scala_io_examples"
 
 version := "1.0"
 
@@ -8,6 +8,7 @@ val akkaVersion = "2.4.9"
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
+  // test
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
   "org.scalatest" %% "scalatest" % "3.0.0" % "test")
 

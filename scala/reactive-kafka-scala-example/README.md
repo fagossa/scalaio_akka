@@ -35,13 +35,13 @@ sbt run
 ```
 Multiple main classes detected, select one to run:
 
- [1] com.example.consumer.BatchCommittableSourceConsumerMain
- [2] com.example.consumer.CommittableSourceConsumerMain
- [3] com.example.consumer.PlainSourceConsumerMain
- [4] com.example.producer.CommitConsumerToFlowProducerMain
- [5] com.example.producer.ConsumerToCommitableSinkProducerMain
- [6] com.example.producer.FlowProducerMain
- [7] com.example.producer.PlainSinkProducerMain
+ [1] com.scalaio.kafka.consumer.BatchCommittableSourceConsumerMain
+ [2] com.scalaio.kafka.consumer.CommittableSourceConsumerMain
+ [3] com.scalaio.kafka.consumer.PlainSourceConsumerMain
+ [4] com.scalaio.kafka.producer.CommitConsumerToFlowProducerMain
+ [5] com.scalaio.kafka.producer.ConsumerToCommitableSinkProducerMain
+ [6] com.scalaio.kafka.producer.FlowProducerMain
+ [7] com.scalaio.kafka.producer.PlainSinkProducerMain
 
 Enter number:
 ```

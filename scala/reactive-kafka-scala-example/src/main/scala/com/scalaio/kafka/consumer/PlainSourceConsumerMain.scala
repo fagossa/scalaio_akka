@@ -1,4 +1,4 @@
-package com.example.consumer
+package com.scalaio.kafka.consumer
 
 import java.util.concurrent.atomic.AtomicLong
 

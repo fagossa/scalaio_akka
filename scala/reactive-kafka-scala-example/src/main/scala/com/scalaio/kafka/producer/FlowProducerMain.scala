@@ -1,4 +1,4 @@
-package com.example.producer
+package com.scalaio.kafka.producer
 
 import akka.actor.ActorSystem
 import akka.kafka.scaladsl.Producer
