@@ -1,4 +1,4 @@
-package com.example.tcp.client
+package com.scalaio.tcp.client
 
 import akka.actor.{ Actor, ActorRef, Props }
 import akka.io.{ IO, Tcp }

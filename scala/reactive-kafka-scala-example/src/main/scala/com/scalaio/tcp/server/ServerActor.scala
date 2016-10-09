@@ -1,4 +1,4 @@
-package com.example.tcp.server
+package com.scalaio.tcp.server
 
 import java.net.InetSocketAddress
 import java.nio.charset.Charset

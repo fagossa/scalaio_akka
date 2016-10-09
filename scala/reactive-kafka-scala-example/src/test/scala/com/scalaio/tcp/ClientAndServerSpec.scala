@@ -1,14 +1,14 @@
-package com.example.tcp
+package com.scalaio.tcp
 
 import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
 
-import akka.actor.{ActorSystem, Props}
-import akka.io.Tcp.{Connected, ConnectionClosed}
+import akka.actor.ActorSystem
+import akka.io.Tcp.Connected
 import akka.testkit.{ImplicitSender, TestKit, TestProbe}
 import akka.util.ByteString
-import com.example.tcp.client.ClientActor
-import com.example.tcp.server.ServerActor
+import com.scalaio.tcp.client.ClientActor
+import com.scalaio.tcp.server.ServerActor
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 import scala.concurrent.duration.FiniteDuration
