@@ -8,9 +8,6 @@ import akka.stream.scaladsl.{Sink, Source}
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.{ByteArraySerializer, StringSerializer}
 
-/**
-  * Created by marksu on 9/6/16.
-  */
 object FlowProducerMain extends App {
   implicit val system = ActorSystem("FlowProducerMain")
   implicit val materializer = ActorMaterializer()

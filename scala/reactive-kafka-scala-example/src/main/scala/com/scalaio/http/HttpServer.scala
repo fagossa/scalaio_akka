@@ -4,6 +4,7 @@ import akka.actor.ActorSystem
 import akka.event.Logging
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.Http.ServerBinding
+import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
 import com.typesafe.config.{Config, ConfigFactory}
@@ -20,7 +21,7 @@ object HttpServer extends RequestTimeout {
   implicit val system = ActorSystem()
   implicit val ec = system.dispatcher  //bindAndHandle requires an implicit ExecutionContext
 
-  val api = new RestApi(system, requestTimeout(config)).routes // the RestApi provides a Route
+  val api: Route = new RestApi(system, requestTimeout(config)).routes // the RestApi provides a Route
 
   implicit val materializer = ActorMaterializer()
   val bindingFuture: Future[ServerBinding] =

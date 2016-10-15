@@ -3,7 +3,7 @@ package com.scalaio.tcp.server
 import java.net.InetSocketAddress
 import java.nio.charset.Charset
 
-import akka.actor.{Actor, Props}
+import akka.actor.{Actor, ActorLogging, Props}
 import akka.io.{IO, Tcp}
 
 object ServerActor {
@@ -11,22 +11,23 @@ object ServerActor {
     Props(classOf[ServerActor], bindAddress)
 }
 
-class ServerActor(bindAddress: InetSocketAddress) extends Actor {
+class ServerActor(bindAddress: InetSocketAddress) extends Actor with ActorLogging {
   import Tcp._
   import context.system
 
+  // TODO: verify why we bind from within the actor
   IO(Tcp) ! Bind(self, bindAddress)
 
   def receive = {
     case b @ Bound(localAddress) =>
-      println(s"Tcp Server bound to $localAddress")
+      log.info(s"Tcp Server bound to <$localAddress>")
 
     case CommandFailed(_: Bind) =>
-      println("Tcp ServerActor failed to bind. Stopping...")
+      log.warning("Tcp ServerActor failed to bind. Stopping...")
       context stop self
 
     case c @ Connected(remote, local) =>
-      println(s"Tcp ServerActor Connected. remote=$remote, local=$local. Starting handler...")
+      log.info(s"Tcp Server Connected. remote=<$remote>, local=<$local>. Starting handler...")
       val handler = context.actorOf(Props(new SimplisticHandler(Charset.forName("UTF-8"))))
       val connection = sender()
       connection ! Register(handler)

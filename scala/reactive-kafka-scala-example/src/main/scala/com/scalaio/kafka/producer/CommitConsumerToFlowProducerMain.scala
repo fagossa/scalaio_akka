@@ -9,9 +9,6 @@ import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.{ByteArrayDeserializer, ByteArraySerializer, StringDeserializer, StringSerializer}
 
-/**
-  * Created by marksu on 9/7/16.
-  */
 object CommitConsumerToFlowProducerMain extends App {
   implicit val system = ActorSystem("CommitConsumerToFlowProducerMain")
   implicit val materializer = ActorMaterializer()
@@ -39,4 +36,8 @@ object CommitConsumerToFlowProducerMain extends App {
         result.message.passThrough.commitScaladsl()
       }
       .runWith(Sink.ignore)
+}
+
+object BusinessController {
+
 }

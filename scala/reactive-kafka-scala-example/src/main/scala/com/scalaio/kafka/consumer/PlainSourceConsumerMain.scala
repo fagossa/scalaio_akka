@@ -15,14 +15,10 @@ import org.apache.kafka.common.serialization.{ByteArrayDeserializer, StringDeser
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-/**
-  * Created by marksu on 8/31/16.
-  */
 object PlainSourceConsumerMain extends App {
   implicit val system = ActorSystem("PlainSourceConsumerMain")
   implicit val materializer = ActorMaterializer()
 
-  //TODO: move to configuration application.conf
   val consumerSettings = ConsumerSettings(system, new ByteArrayDeserializer, new StringDeserializer)
     .withBootstrapServers("localhost:9092")
     .withGroupId("PlainSourceConsumer")
@@ -35,14 +31,14 @@ object PlainSourceConsumerMain extends App {
       new TopicPartition("topic1", partition) -> fromOffset
     )
     val done =
-      Consumer.plainSource(consumerSettings, subscription)
+      Consumer
+        .plainSource(consumerSettings, subscription)
         .mapAsync(1)(db.save)
         .runWith(Sink.ignore)
   }
 
 }
 
-//External Offset Storage
 class DB {
 
   private val offset = new AtomicLong(2)

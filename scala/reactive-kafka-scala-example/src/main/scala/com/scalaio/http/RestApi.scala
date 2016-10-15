@@ -3,15 +3,16 @@ package com.scalaio.http
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
-
 import akka.actor._
+import akka.event.Logging.Error
 import akka.pattern.ask
 import akka.util.Timeout
-
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
+import com.scalaio.http.messages.BoxOffice
+import com.scalaio.http.messages.BoxOffice.{CreateEvent, EventDescription, TicketRequest}
 
 class RestApi(system: ActorSystem, timeout: Timeout) extends RestRoutes {
   implicit val requestTimeout = timeout
@@ -87,15 +88,17 @@ trait RestRoutes extends BoxOfficeApi
 trait BoxOfficeApi {
   import BoxOffice._
 
-  def createBoxOffice(): ActorRef
+  def createBoxOffice: ActorRef
 
   implicit def executionContext: ExecutionContext
   implicit def requestTimeout: Timeout
 
-  lazy val boxOffice = createBoxOffice()
+  lazy val boxOffice = createBoxOffice
 
   def createEvent(event: String, nrOfTickets: Int) =
     boxOffice.ask(CreateEvent(event, nrOfTickets))
       .mapTo[EventResponse]
 
 }
+
+
