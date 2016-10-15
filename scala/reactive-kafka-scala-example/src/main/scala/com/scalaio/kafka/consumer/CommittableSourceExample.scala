@@ -3,31 +3,39 @@ package com.scalaio.kafka.consumer
 import akka.actor.ActorSystem
 import akka.kafka.ConsumerMessage.CommittableMessage
 import akka.kafka.scaladsl.Consumer
-import akka.kafka.{ConsumerSettings, Subscriptions}
+import akka.kafka.{ConsumerSettings, ProducerSettings, Subscriptions}
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Sink
+import com.scalaio.kafka.consumer.Settings.consumerSettings
 import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.kafka.common.serialization.{ByteArrayDeserializer, StringDeserializer}
+import org.apache.kafka.common.serialization.{ByteArrayDeserializer, ByteArraySerializer, StringDeserializer, StringSerializer}
 
 import scala.concurrent.Future
 
-object CommittableSourceConsumerMain extends App {
+object Settings {
+  def consumerSettings(implicit system: ActorSystem) =
+    ConsumerSettings(system, new ByteArrayDeserializer, new StringDeserializer)
+      .withBootstrapServers("localhost:9092")
+      .withGroupId("CommittableSourceConsumer")
+      .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
+
+  def producerSettings(implicit system: ActorSystem) =
+    ProducerSettings(system, new ByteArraySerializer, new StringSerializer)
+      .withBootstrapServers("localhost:9092")
+}
+
+object CommittableSource extends App {
 
   type KafkaMessage = CommittableMessage[Array[Byte], String]
 
   implicit val system = ActorSystem("CommittableSourceConsumerMain")
   implicit val materializer = ActorMaterializer()
 
-  val consumerSettings =
-    ConsumerSettings(system, new ByteArrayDeserializer, new StringDeserializer)
-      .withBootstrapServers("localhost:9092")
-      .withGroupId("CommittableSourceConsumer")
-      .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
-
+  // explicit commit
   Consumer
     .committableSource(consumerSettings, Subscriptions.topics("topic1"))
     .mapAsync(1) { msg =>
-      BusinessController.handleMessage(msg.record.value())
+      BusinessController.handleMessage(msg.record.value)
         .flatMap(response => msg.committableOffset.commitScaladsl())
         .recoverWith { case e => msg.committableOffset.commitScaladsl() }
     }

@@ -43,7 +43,9 @@ class DB {
 
   private val offset = new AtomicLong(2)
 
-  def save(record: ConsumerRecord[Array[Byte], String]): Future[Done] = {
+  type KafkaMessage = ConsumerRecord[Array[Byte], String]
+
+  def save(record: KafkaMessage): Future[Done] = {
     println(s"DB.save: ${record.value}")
     offset.set(record.offset)
     Future.successful(Done)
