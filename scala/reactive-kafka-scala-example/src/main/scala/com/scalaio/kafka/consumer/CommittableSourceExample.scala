@@ -31,6 +31,8 @@ object CommittableSource extends App {
   implicit val system = ActorSystem("CommittableSourceConsumerMain")
   implicit val materializer = ActorMaterializer()
 
+  implicit val ec = system.dispatcher
+
   // explicit commit
   Consumer
     .committableSource(consumerSettings, Subscriptions.topics("topic1"))
