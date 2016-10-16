@@ -19,7 +19,7 @@ object HttpServer extends RequestTimeout {
   val port = config.getInt("http.port")
 
   implicit val system = ActorSystem()
-  implicit val ec = system.dispatcher  //bindAndHandle requires an implicit ExecutionContext
+  implicit val ec = system.dispatcher
 
   val api: Route = new RestApi(system, requestTimeout(config)).routes
 
