@@ -11,13 +11,19 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-http-core" % akkaVersion,
   "com.typesafe.akka" %% "akka-http-experimental" % akkaVersion,
   "com.typesafe.akka" %% "akka-stream-kafka" % "0.11-RC1",
+  // mapping
   "io.spray"          %% "spray-json"      % "1.3.1",
-  // logs
+  "com.typesafe.play" %% "play-json" % "2.5.8",
+  // monitoring
+  "com.yammer.metrics" % "metrics-core" % "2.2.0",
+
+// logs
   "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
   "ch.qos.logback"    %  "logback-classic" % "1.1.3",
   // test
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
-  "org.scalatest" %% "scalatest" % "3.0.0" % "test")
+  "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 
+)
 
 fork in run := true
