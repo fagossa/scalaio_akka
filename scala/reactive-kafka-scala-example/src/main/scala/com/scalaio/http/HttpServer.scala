@@ -21,11 +21,12 @@ object HttpServer extends RequestTimeout {
   implicit val system = ActorSystem()
   implicit val ec = system.dispatcher  //bindAndHandle requires an implicit ExecutionContext
 
-  val api: Route = new RestApi(system, requestTimeout(config)).routes // the RestApi provides a Route
+  val api: Route = new RestApi(system, requestTimeout(config)).routes
 
   implicit val materializer = ActorMaterializer()
   val bindingFuture: Future[ServerBinding] =
-    Http().bindAndHandle(api, host, port) //Starts the HTTP server
+    Http()
+      .bindAndHandle(api, host, port) //Starts the HTTP server
 
   val log =  Logging(system.eventStream, "go-ticks")
   bindingFuture.map { serverBinding =>
