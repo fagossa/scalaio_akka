@@ -4,6 +4,7 @@ import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
 
 import akka.actor.ActorSystem
+import akka.io.{IO, Tcp}
 import akka.io.Tcp.Connected
 import akka.testkit.{ImplicitSender, TestKit, TestProbe}
 import akka.util.ByteString
@@ -23,7 +24,7 @@ class ClientAndServerSpec(_system: ActorSystem) extends TestKit(_system) with Im
       val serverActor = _system.actorOf(ServerActor.props(new InetSocketAddress("localhost", 1040)))
 
       val listener = TestProbe()
-      val clientActor = _system.actorOf(ClientActor.props(new InetSocketAddress("localhost", 1040), listener.ref))
+      val clientActor = _system.actorOf(ClientActor.props(new InetSocketAddress("localhost", 1040), IO(Tcp) ,listener.ref))
 
       listener.expectMsgType[Connected](FiniteDuration(1, TimeUnit.SECONDS))
 

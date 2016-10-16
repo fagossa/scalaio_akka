@@ -1,20 +1,20 @@
 package com.scalaio.tcp.client
 
 import akka.actor.{ Actor, ActorRef, Props }
-import akka.io.{ IO, Tcp }
+import akka.io.Tcp
 import akka.util.ByteString
 import java.net.InetSocketAddress
 
 object ClientActor {
-  def props(remote: InetSocketAddress, replies: ActorRef) =
-    Props(classOf[ClientActor], remote, replies)
+  def props(remote: InetSocketAddress, tcp: ActorRef, replies: ActorRef) =
+    Props(classOf[ClientActor], remote, tcp, replies)
 }
 
-class ClientActor(remote: InetSocketAddress, listener: ActorRef) extends Actor {
+class ClientActor(remote: InetSocketAddress, tcp:ActorRef, listener: ActorRef) extends Actor {
   import Tcp._
   import context.system
 
-  IO(Tcp) ! Connect(remote)
+  tcp ! Connect(remote)
 
   def receive = {
     case CommandFailed(_: Connect) =>
