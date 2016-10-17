@@ -22,7 +22,7 @@ class ClientActorSpec (_system: ActorSystem) extends TestKit(_system) with Impli
   }
 
   "A ClientActor" must {
-    "Connect to local test server" in {
+    "Connect and send data to server" in {
       val targetAdress = new InetSocketAddress("localhost", 1040)
       val fakeLocalAddress = new InetSocketAddress("localhost", 1042)
       val tcpProbe = TestProbe()
