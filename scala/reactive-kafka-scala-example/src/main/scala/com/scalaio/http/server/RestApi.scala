@@ -1,15 +1,16 @@
-package com.scalaio.http
+package com.scalaio.http.server
 
-import scala.concurrent.{ExecutionContext, Future}
 import akka.actor._
-import akka.pattern.ask
-import akka.util.Timeout
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
-import com.scalaio.http.TicketSeller.Tickets
+import akka.pattern.ask
+import akka.util.Timeout
+import com.scalaio.http.server.TicketSeller.Tickets
 import org.slf4j.{Logger, LoggerFactory}
 import play.api.libs.json.Json._
+
+import scala.concurrent.{ExecutionContext, Future}
 
 class RestApi(system: ActorSystem, timeout: Timeout) extends RestRoutes with EventMarshalling {
 

@@ -1,4 +1,4 @@
-package com.scalaio.http
+package com.scalaio.http.server
 
 import akka.actor.ActorSystem
 import akka.event.Logging

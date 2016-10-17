@@ -1,6 +1,6 @@
-package com.scalaio.http
+package com.scalaio.http.server
 
-import akka.http.scaladsl.unmarshalling.{FromRequestUnmarshaller, Unmarshaller}
+import akka.http.scaladsl.unmarshalling.Unmarshaller
 
 case class EventDescription(tickets: Int) {
   require(tickets > 0)
@@ -14,9 +14,8 @@ case class Error(message: String)
 
 trait EventMarshalling {
   import BoxOffice._
-
   import akka.http.scaladsl.model.HttpEntity
-  import play.api.libs.json.{JsObject, Json}
+  import play.api.libs.json.Json
 
   implicit val eventDescriptionFormat = Json.format[EventDescription]
   implicit val eventFormat = Json.format[Event]

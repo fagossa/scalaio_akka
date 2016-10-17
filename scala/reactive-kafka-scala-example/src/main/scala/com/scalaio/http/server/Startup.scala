@@ -1,15 +1,13 @@
-package com.scalaio.http
-
-import scala.concurrent.Future
+package com.scalaio.http.server
 
 import akka.actor.ActorSystem
 import akka.event.Logging
-
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.Http.ServerBinding
 import akka.http.scaladsl.server.Route
-
 import akka.stream.ActorMaterializer
+
+import scala.concurrent.Future
 
 trait Startup extends RequestTimeout {
   def startup(api: Route)(implicit system: ActorSystem) = {
