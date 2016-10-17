@@ -1,6 +1,6 @@
 package com.scalaio.http
 
-import akka.http.scaladsl.unmarshalling.Unmarshaller
+import akka.http.scaladsl.unmarshalling.{FromRequestUnmarshaller, Unmarshaller}
 
 case class EventDescription(tickets: Int) {
   require(tickets > 0)
@@ -26,9 +26,15 @@ trait EventMarshalling {
   implicit val ticketsFormat = Json.format[TicketSeller.Tickets]
   implicit val errorFormat = Json.format[Error]
 
-  implicit val um: Unmarshaller[HttpEntity, JsObject] = {
+  implicit val umEventDescription: Unmarshaller[HttpEntity, EventDescription] = {
     Unmarshaller.byteStringUnmarshaller.mapWithCharset { (data, charset) =>
-      Json.parse(data.toArray).as[JsObject]
+      Json.parse(data.toArray).as[EventDescription]
+    }
+  }
+
+  implicit val umTicketRequest: Unmarshaller[HttpEntity, TicketRequest] = {
+    Unmarshaller.byteStringUnmarshaller.mapWithCharset { (data, charset) =>
+      Json.parse(data.toArray).as[TicketRequest]
     }
   }
 }
