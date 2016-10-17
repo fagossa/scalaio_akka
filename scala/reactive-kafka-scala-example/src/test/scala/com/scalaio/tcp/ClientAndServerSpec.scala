@@ -1,15 +1,16 @@
 package com.scalaio.tcp
 
 import java.net.InetSocketAddress
+import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
 
 import akka.actor.ActorSystem
-import akka.io.{IO, Tcp}
 import akka.io.Tcp.Connected
+import akka.io.{IO, Tcp}
 import akka.testkit.{ImplicitSender, TestKit, TestProbe}
 import akka.util.ByteString
 import com.scalaio.tcp.client.ClientActor
-import com.scalaio.tcp.server.ServerActor
+import com.scalaio.tcp.server.{ServerActor, SimplisticHandler}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 import scala.concurrent.duration.FiniteDuration
@@ -21,7 +22,9 @@ class ClientAndServerSpec(_system: ActorSystem) extends TestKit(_system) with Im
 
   "Client and server" must {
     "exchange data" in {
-      val serverActor = _system.actorOf(ServerActor.props(new InetSocketAddress("localhost", 1040)))
+      val handlerRef = _system.actorOf(SimplisticHandler.props(Charset.forName("UTF-8")))
+
+      val serverActor = _system.actorOf(ServerActor.props(new InetSocketAddress("localhost", 1040), IO(Tcp), handlerRef))
 
       val listener = TestProbe()
       val clientActor = _system.actorOf(ClientActor.props(new InetSocketAddress("localhost", 1040), IO(Tcp) ,listener.ref))
