@@ -23,7 +23,7 @@ object Settings {
       .withBootstrapServers("localhost:9092")
 }
 
-object CommitConsumerToFlowProducerMain extends App {
+object ProducerMain extends App {
   implicit val system = ActorSystem("CommitConsumerToFlowProducerMain")
   implicit val materializer = ActorMaterializer()
 
