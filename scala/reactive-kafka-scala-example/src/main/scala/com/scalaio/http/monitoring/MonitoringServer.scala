@@ -21,7 +21,7 @@ object MonitoringServer {
 
   lazy val logger = LoggerFactory.getLogger(getClass)
 
-  def handleHealthchecks(registry: HealthCheckRegistry = HealthChecks.defaultRegistry()): Route = {
+  def handleHealthchecks(registry: HealthCheckRegistry): Route = {
     path("health") {
       get {
         complete {
