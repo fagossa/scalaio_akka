@@ -53,7 +53,8 @@ object MonitoringServer {
     val routes = handleHealthchecks(registry) ~ redirect(Uri("/health"), StatusCodes.SeeOther)
 
     import system.dispatcher
-    Http().bindAndHandle(routes, host, port).onComplete {
+    Http()
+      .bindAndHandle(routes, host, port).onComplete {
       case Success(Http.ServerBinding(address)) =>
         logger.info(s"Monitoring server started at :$address")
 
