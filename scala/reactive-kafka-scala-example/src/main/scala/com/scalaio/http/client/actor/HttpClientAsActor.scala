@@ -15,9 +15,7 @@ class HttpClientAsActor(notifier: ActorRef) extends Actor with ActorLogging {
 
   import akka.pattern.pipe
   import context.dispatcher
-
   implicit val timeout = Timeout(5 seconds)
-
   implicit val materializer = ActorMaterializer(ActorMaterializerSettings(context.system))
 
   val http = Http(context.system)
@@ -30,7 +28,6 @@ class HttpClientAsActor(notifier: ActorRef) extends Actor with ActorLogging {
 
   def receive = {
     case HttpResponse(StatusCodes.OK, headers, entity, _) =>
-      // Handling the byte source
       val response: Future[ByteString] = entity.dataBytes.runFold(ByteString(""))(_ ++ _)
       log.info(s"got response $headers $entity")
       response pipeTo self

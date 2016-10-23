@@ -34,34 +34,27 @@ object MonitoringServer {
                 "message" -> result.getMessage
               )
           }.toSeq)
-
           val status = if (checks.values().forall(_.isHealthy)) OK else InternalServerError
-
           HttpResponse(entity = HttpEntity(`application/json`, Json.stringify(payload)), status = status)
         }
       }
     }
   }
 
-  def start(serverConfig: Config, registry: HealthCheckRegistry = HealthChecks.defaultRegistry())(implicit system: ActorSystem, materializer: Materializer): Unit = {
-
+  def start(serverConfig: Config, registry: HealthCheckRegistry = HealthChecks.defaultRegistry())
+           (implicit system: ActorSystem, materializer: Materializer): Unit = {
     val host = serverConfig.getString("host")
     val port = serverConfig.getInt("port")
-
     logger.info(s"Starting monitoring server at: $host:$port")
 
     val routes = handleHealthchecks(registry) ~ redirect(Uri("/health"), StatusCodes.SeeOther)
-
     import system.dispatcher
     Http()
       .bindAndHandle(routes, host, port).onComplete {
       case Success(Http.ServerBinding(address)) =>
         logger.info(s"Monitoring server started at :$address")
-
       case Failure(t) =>
         logger.error("Error while trying to start monitoring server", t)
     }
-
-
   }
 }
