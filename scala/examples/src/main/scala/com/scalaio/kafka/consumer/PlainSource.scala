@@ -29,14 +29,14 @@ object PlainSourceConsumerMain extends App {
 
   lazy val logger = LoggerFactory.getLogger(getClass)
 
+  implicit val system = ActorSystem("PlainSourceConsumerMain")
+
+  implicit val ec = system.dispatcher
+
   val decider: Supervision.Decider = {
     case _: IllegalStateException => Supervision.Resume
     case _ => Supervision.Stop
   }
-
-  implicit val system = ActorSystem("PlainSourceConsumerMain")
-
-  implicit val ec = system.dispatcher
 
   implicit val materializer = ActorMaterializer(
     ActorMaterializerSettings(system)

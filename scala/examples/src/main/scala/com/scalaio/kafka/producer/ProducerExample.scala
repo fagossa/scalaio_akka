@@ -1,6 +1,7 @@
 package com.scalaio.kafka.producer
 
 import akka.actor.ActorSystem
+import akka.kafka.ConsumerMessage.CommittableOffsetBatch
 import akka.kafka.scaladsl.{Consumer, Producer}
 import akka.kafka.{ProducerSettings, _}
 import akka.stream.ActorMaterializer
@@ -49,5 +50,18 @@ object ProducerMain extends App {
     .mapAsync(producerSettings.parallelism) { result =>
       result.message.passThrough.commitScaladsl()
     }
+    .runWith(Sink.ignore)
+
+  // 3. consume and produce with batch
+  Consumer.committableSource(consumerSettings, Subscriptions.topics("topic1"))
+    .map(msg =>
+      ProducerMessage.Message(new ProducerRecord[Array[Byte], String]("topic2", msg.record.value),
+        msg.committableOffset))
+    .via(Producer.flow(producerSettings))
+    .map(_.message.passThrough)
+    .batch(max = 20, first => CommittableOffsetBatch.empty.updated(first)) { (batch, elem) =>
+      batch.updated(elem)
+    }
+    .mapAsync(3)(_.commitScaladsl())
     .runWith(Sink.ignore)
 }
